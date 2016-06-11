@@ -2,6 +2,8 @@
 
 Für Font Awesome-Icons, auch andere Font-Icons möglich
 
+![iconpicker](https://cloud.githubusercontent.com/assets/330160/15984770/f63f8c90-2fd6-11e6-9581-2cc6e9873909.png)
+
 ## Funktionen
 
 Das Iconpicker-AddOn verwendet folgendes Skript:
