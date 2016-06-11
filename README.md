@@ -9,7 +9,7 @@ Für Font Awesome-Icons, auch andere Font-Icons möglich
 Das Iconpicker-AddOn verwendet folgendes Skript:
 <a href="http://mjolnic.com/fontawesome-iconpicker/" target="_blank" href="">http://mjolnic.com/fontawesome-iconpicker/</a></p>
 
-Eventuelle Anpassungen beim Aufruf des Iconpickers können amn besten in die Datei ```assets/iconpicker.js`` geschrieben werden.
+Eventuelle Anpassungen beim Aufruf des Iconpickers können amn besten in die Datei ```assets/iconpicker.js``` geschrieben werden.
 
 ## Benutzung
 Um den Iconpicker für ein Textfeld zu aktivieren, diesem die CSS-Klasse "icp" zuweisen.  
