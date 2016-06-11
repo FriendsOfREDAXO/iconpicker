@@ -2,3 +2,6 @@ package: iconpicker
 version: '0.1'
 author: 'Peter Bickel'
 supportpage: www.redaxo.org/de/forum/
+
+requires:
+    redaxo: '>=5.0'
