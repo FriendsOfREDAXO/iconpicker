@@ -2,7 +2,7 @@
 
 Für Font Awesome-Icons, auch andere Font-Icons möglich
 
-![iconpicker](https://cloud.githubusercontent.com/assets/330160/15984770/f63f8c90-2fd6-11e6-9581-2cc6e9873909.png)
+![screenshot_iconpicker](https://cloud.githubusercontent.com/assets/330160/15991766/e87b44c8-30bc-11e6-8bab-c7094d278d0d.jpg)
 
 ## Funktionen
 
