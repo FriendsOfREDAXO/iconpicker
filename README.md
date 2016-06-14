@@ -9,7 +9,7 @@ Für Font Awesome-Icons, auch andere Font-Icons möglich
 Das Iconpicker-AddOn verwendet folgendes Skript:
 <a href="http://mjolnic.com/fontawesome-iconpicker/" target="_blank" href="">http://mjolnic.com/fontawesome-iconpicker/</a></p>
 
-Eventuelle Anpassungen beim Aufruf des Iconpickers können amn besten in die Datei ```assets/iconpicker.js``` geschrieben werden.
+Eventuelle Anpassungen beim Aufruf des Iconpickers können am besten in die Datei ```assets/iconpicker.js``` geschrieben werden.
 
 ## Benutzung
 
@@ -23,7 +23,7 @@ Um den Iconpicker für ein Textfeld zu aktivieren, diesem die CSS-Klasse "icp" z
 Damit das Popup nicht abgeschnitten wird, muss der Container `form-group` die CSS-Eigenschaft `overflow: visible` haben.
 Die Position des Popups kann über data-placement bestimmt werden.
 
-Der vollständiger Beispiel-Code für ein Modul könnte also so aussehen:
+Der vollständige Beispiel-Code für ein Modul könnte also so aussehen:
 
 ```html
 <div class="form-group" style="overflow: visible;">
