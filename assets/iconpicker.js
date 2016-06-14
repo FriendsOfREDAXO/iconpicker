@@ -1,3 +1,3 @@
-$(function() {
-	$('.icp').iconpicker();
+$(document).on('ready pjax:success',function() {
+    $('.icp').iconpicker();
 });

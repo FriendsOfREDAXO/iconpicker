@@ -387,27 +387,37 @@
         this.options.originalPlacement = this.options.placement;
         this.container = b.isElement(this.options.container) ? a(this.options.container) : false;
         if (this.container === false) {
-            this.container = this.element.is("input") ? this.element.parent() : this.element;
+            if (this.element.is(".dropdown-toggle")) {
+                this.container = a("~ .dropdown-menu:first", this.element);
+            } else {
+                this.container = this.element.is("input,textarea,button,.btn") ? this.element.parent() : this.element;
+            }
         }
-        if (this.container.addClass("iconpicker-container").is(".dropdown-menu")) {
+        this.container.addClass("iconpicker-container");
+        if (this.isDropdownMenu()) {
+            this.options.templates.search = false;
+            this.options.templates.buttons = false;
             this.options.placement = "inline";
         }
-        this.input = this.element.is("input") ? this.element.addClass("iconpicker-input") : false;
+        this.input = this.element.is("input,textarea") ? this.element.addClass("iconpicker-input") : false;
         if (this.input === false) {
             this.input = this.container.find(this.options.input);
+            if (!this.input.is("input,textarea")) {
+                this.input = false;
+            }
         }
-        this.component = this.container.find(this.options.component).addClass("iconpicker-component");
+        this.component = this.isDropdownMenu() ? this.container.parent().find(this.options.component) : this.container.find(this.options.component);
         if (this.component.length === 0) {
             this.component = false;
         } else {
-            this.component.find("i").addClass(this.options.iconComponentBaseClass);
+            this.component.find("i").addClass("iconpicker-component");
         }
         this._createPopover();
         this._createIconpicker();
         if (this.getAcceptButton().length === 0) {
             this.options.mustAccept = false;
         }
-        if (this.container.is(".input-group")) {
+        if (this.isInputGroup()) {
             this.container.parent().append(this.popover);
         } else {
             this.container.append(this.popover);
@@ -434,19 +444,20 @@
         mustAccept: false,
         selectedCustomClass: "bg-primary",
         icons: [],
-        iconBaseClass: "fa",
-        iconComponentBaseClass: "fa fa-fw",
-        iconClassPrefix: "fa-",
-        input: "input",
-        component: ".input-group-addon",
+        fullClassFormatter: function(a) {
+            return "fa " + a;
+        },
+        input: "input,.iconpicker-input",
+        inputSearch: false,
         container: false,
+        component: ".input-group-addon,.iconpicker-component",
         templates: {
             popover: '<div class="iconpicker-popover popover"><div class="arrow"></div>' + '<div class="popover-title"></div><div class="popover-content"></div></div>',
             footer: '<div class="popover-footer"></div>',
             buttons: '<button class="iconpicker-btn iconpicker-btn-cancel btn btn-default btn-sm">Cancel</button>' + ' <button class="iconpicker-btn iconpicker-btn-accept btn btn-primary btn-sm">Accept</button>',
-            search: '<input type="search" class="form-control iconpicker-search" placeholder="Type to filter" />',
+            search: '<input type="search" class="form-control iconpicker-search" placeholder="Filter ..." />',
             iconpicker: '<div class="iconpicker"><div class="iconpicker-items"></div></div>',
-            iconpickerItem: '<div class="iconpicker-item"><i></i></div>'
+            iconpickerItem: '<a role="button" href="#" class="iconpicker-item"><i></i></a>'
         }
     };
     c.batch = function(b, c) {
@@ -475,14 +486,14 @@
             if (!!this.options.title) {
                 c.append(a('<div class="popover-title-text">' + this.options.title + "</div>"));
             }
-            if (!this.options.searchInFooter && !b.isEmpty(this.options.templates.buttons)) {
+            if (this.hasSeparatedSearchInput() && !this.options.searchInFooter) {
                 c.append(this.options.templates.search);
             } else if (!this.options.title) {
                 c.remove();
             }
             if (this.options.showFooter && !b.isEmpty(this.options.templates.footer)) {
                 var d = a(this.options.templates.footer);
-                if (!b.isEmpty(this.options.templates.search) && this.options.searchInFooter) {
+                if (this.hasSeparatedSearchInput() && this.options.searchInFooter) {
                     d.append(a(this.options.templates.search));
                 }
                 if (!b.isEmpty(this.options.templates.buttons)) {
@@ -500,7 +511,7 @@
             this.iconpicker = a(this.options.templates.iconpicker);
             var c = function(c) {
                 var d = a(this);
-                if (d.is("." + b.options.iconBaseClass)) {
+                if (d.is("i")) {
                     d = d.parent();
                 }
                 b._trigger("iconpickerSelect", {
@@ -519,12 +530,14 @@
                 if (b.options.hideOnSelect && b.options.mustAccept === false) {
                     b.hide();
                 }
+                c.preventDefault();
+                return false;
             };
             for (var d in this.options.icons) {
                 var e = a(this.options.templates.iconpickerItem);
-                e.find("i").addClass(b.options.iconBaseClass + " " + this.options.iconClassPrefix + this.options.icons[d]);
+                e.find("i").addClass(this.options.fullClassFormatter(this.options.icons[d]));
                 e.data("iconpickerValue", this.options.icons[d]).on("click.iconpicker", c);
-                this.iconpicker.find(".iconpicker-items").append(e.attr("title", "." + this.getValue(this.options.icons[d])));
+                this.iconpicker.find(".iconpicker-items").append(e.attr("title", "." + this.options.icons[d]));
             }
             this.popover.find(".popover-content").append(this.iconpicker);
             return this.iconpicker;
@@ -538,7 +551,7 @@
         },
         _bindElementEvents: function() {
             var c = this;
-            this.getSearchInput().on("keyup", function() {
+            this.getSearchInput().on("keyup.iconpicker", function() {
                 c.filter(a(this).val().toLowerCase());
             });
             this.getAcceptButton().on("click.iconpicker", function() {
@@ -567,11 +580,14 @@
                 });
             }
             if (this.hasInput()) {
-                this.input.on("keyup.iconpicker", function(a) {
-                    if (!b.inArray(a.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
+                this.input.on("keyup.iconpicker", function(d) {
+                    if (!b.inArray(d.keyCode, [ 38, 40, 37, 39, 16, 17, 18, 9, 8, 91, 93, 20, 46, 186, 190, 46, 78, 188, 44, 86 ])) {
                         c.update();
                     } else {
                         c._updateFormGroupStatus(c.getValid(this.value) !== false);
+                    }
+                    if (c.options.inputSearch === true) {
+                        c.filter(a(this).val().toLowerCase());
                     }
                 });
             }
@@ -622,7 +638,7 @@
             var d = {
                 at: "right bottom",
                 my: "right top",
-                of: this.hasInput() ? this.input : this.container,
+                of: this.hasInput() && !this.isInputGroup() ? this.input : this.container,
                 collision: c === true ? "flip" : c,
                 within: window
             };
@@ -774,13 +790,15 @@
         },
         _updateComponents: function() {
             this.iconpicker.find(".iconpicker-item.iconpicker-selected").removeClass("iconpicker-selected " + this.options.selectedCustomClass);
-            this.iconpicker.find("." + this.options.iconBaseClass + "." + this.options.iconClassPrefix + this.iconpickerValue).parent().addClass("iconpicker-selected " + this.options.selectedCustomClass);
+            if (this.iconpickerValue) {
+                this.iconpicker.find("." + this.options.fullClassFormatter(this.iconpickerValue).replace(/ /g, ".")).parent().addClass("iconpicker-selected " + this.options.selectedCustomClass);
+            }
             if (this.hasComponent()) {
                 var a = this.component.find("i");
                 if (a.length > 0) {
-                    a.attr("class", this.options.iconComponentBaseClass + " " + this.getValue());
+                    a.attr("class", this.options.fullClassFormatter(this.iconpickerValue));
                 } else {
-                    this.component.html(this.getValueHtml());
+                    this.component.html(this.getHtml());
                 }
             }
         },
@@ -800,7 +818,7 @@
                 c = "";
             }
             var d = c === "";
-            c = a.trim(c.replace(this.options.iconClassPrefix, ""));
+            c = a.trim(c);
             if (b.inArray(c, this.options.icons) || d) {
                 return c;
             }
@@ -821,19 +839,16 @@
                 return false;
             }
         },
-        getValue: function(a) {
-            return this.options.iconClassPrefix + (a ? a : this.iconpickerValue);
-        },
-        getValueHtml: function() {
-            return '<i class="' + this.options.iconBaseClass + " " + this.getValue() + '"></i>';
+        getHtml: function() {
+            return '<i class="' + this.options.fullClassFormatter(this.iconpickerValue) + '"></i>';
         },
         setSourceValue: function(a) {
             a = this.setValue(a);
             if (a !== false && a !== "") {
                 if (this.hasInput()) {
-                    this.input.val(this.getValue());
+                    this.input.val(this.iconpickerValue);
                 } else {
-                    this.element.data("iconpickerValue", this.getValue());
+                    this.element.data("iconpickerValue", this.iconpickerValue);
                 }
                 this._trigger("iconpickerSetSourceValue", {
                     iconpickerValue: a
@@ -856,6 +871,18 @@
         },
         hasInput: function() {
             return this.input !== false;
+        },
+        isInputSearch: function() {
+            return this.hasInput() && this.options.inputSearch === true;
+        },
+        isInputGroup: function() {
+            return this.container.is(".input-group");
+        },
+        isDropdownMenu: function() {
+            return this.container.is(".dropdown-menu");
+        },
+        hasSeparatedSearchInput: function() {
+            return this.options.templates.search !== false && !this.isInputSearch();
         },
         hasComponent: function() {
             return this.component !== false;
@@ -986,5 +1013,5 @@
             }
         });
     };
-    c.defaultOptions.icons = [ "adjust", "adn", "align-center", "align-justify", "align-left", "align-right", "ambulance", "anchor", "android", "angle-double-down", "angle-double-left", "angle-double-right", "angle-double-up", "angle-down", "angle-left", "angle-right", "angle-up", "apple", "archive", "arrow-circle-down", "arrow-circle-left", "arrow-circle-o-down", "arrow-circle-o-left", "arrow-circle-o-right", "arrow-circle-o-up", "arrow-circle-right", "arrow-circle-up", "arrow-down", "arrow-left", "arrow-right", "arrow-up", "arrows", "arrows-alt", "arrows-h", "arrows-v", "asterisk", "automobile", "backward", "ban", "bank", "bar-chart-o", "barcode", "bars", "beer", "behance", "behance-square", "bell", "bell-o", "bitbucket", "bitbucket-square", "bitcoin", "bold", "bolt", "bomb", "book", "bookmark", "bookmark-o", "briefcase", "btc", "bug", "building", "building-o", "bullhorn", "bullseye", "cab", "calendar", "calendar-o", "camera", "camera-retro", "car", "caret-down", "caret-left", "caret-right", "caret-square-o-down", "caret-square-o-left", "caret-square-o-right", "caret-square-o-up", "caret-up", "certificate", "chain", "chain-broken", "check", "check-circle", "check-circle-o", "check-square", "check-square-o", "chevron-circle-down", "chevron-circle-left", "chevron-circle-right", "chevron-circle-up", "chevron-down", "chevron-left", "chevron-right", "chevron-up", "child", "circle", "circle-o", "circle-o-notch", "circle-thin", "clipboard", "clock-o", "cloud", "cloud-download", "cloud-upload", "cny", "code", "code-fork", "codepen", "coffee", "cog", "cogs", "columns", "comment", "comment-o", "comments", "comments-o", "compass", "compress", "copy", "credit-card", "crop", "crosshairs", "css3", "cube", "cubes", "cut", "cutlery", "dashboard", "database", "dedent", "delicious", "desktop", "deviantart", "digg", "dollar", "dot-circle-o", "download", "dribbble", "dropbox", "drupal", "edit", "eject", "ellipsis-h", "ellipsis-v", "empire", "envelope", "envelope-o", "envelope-square", "eraser", "eur", "euro", "exchange", "exclamation", "exclamation-circle", "exclamation-triangle", "expand", "external-link", "external-link-square", "eye", "eye-slash", "facebook", "facebook-square", "fast-backward", "fast-forward", "fax", "female", "fighter-jet", "file", "file-archive-o", "file-audio-o", "file-code-o", "file-excel-o", "file-image-o", "file-movie-o", "file-o", "file-pdf-o", "file-photo-o", "file-picture-o", "file-powerpoint-o", "file-sound-o", "file-text", "file-text-o", "file-video-o", "file-word-o", "file-zip-o", "files-o", "film", "filter", "fire", "fire-extinguisher", "flag", "flag-checkered", "flag-o", "flash", "flask", "flickr", "floppy-o", "folder", "folder-o", "folder-open", "folder-open-o", "font", "forward", "foursquare", "frown-o", "gamepad", "gavel", "gbp", "ge", "gear", "gears", "gift", "git", "git-square", "github", "github-alt", "github-square", "gittip", "glass", "globe", "google", "google-plus", "google-plus-square", "graduation-cap", "group", "h-square", "hacker-news", "hand-o-down", "hand-o-left", "hand-o-right", "hand-o-up", "hdd-o", "header", "headphones", "heart", "heart-o", "history", "home", "hospital-o", "html5", "image", "inbox", "indent", "info", "info-circle", "inr", "instagram", "institution", "italic", "joomla", "jpy", "jsfiddle", "key", "keyboard-o", "krw", "language", "laptop", "leaf", "legal", "lemon-o", "level-down", "level-up", "life-bouy", "life-ring", "life-saver", "lightbulb-o", "link", "linkedin", "linkedin-square", "linux", "list", "list-alt", "list-ol", "list-ul", "location-arrow", "lock", "long-arrow-down", "long-arrow-left", "long-arrow-right", "long-arrow-up", "magic", "magnet", "mail-forward", "mail-reply", "mail-reply-all", "male", "map-marker", "maxcdn", "medkit", "meh-o", "microphone", "microphone-slash", "minus", "minus-circle", "minus-square", "minus-square-o", "mobile", "mobile-phone", "money", "moon-o", "mortar-board", "music", "navicon", "openid", "outdent", "pagelines", "paper-plane", "paper-plane-o", "paperclip", "paragraph", "paste", "pause", "paw", "pencil", "pencil-square", "pencil-square-o", "phone", "phone-square", "photo", "picture-o", "pied-piper", "pied-piper-alt", "pied-piper-square", "pinterest", "pinterest-square", "plane", "play", "play-circle", "play-circle-o", "plus", "plus-circle", "plus-square", "plus-square-o", "power-off", "print", "puzzle-piece", "qq", "qrcode", "question", "question-circle", "quote-left", "quote-right", "ra", "random", "rebel", "recycle", "reddit", "reddit-square", "refresh", "renren", "reorder", "repeat", "reply", "reply-all", "retweet", "rmb", "road", "rocket", "rotate-left", "rotate-right", "rouble", "rss", "rss-square", "rub", "ruble", "rupee", "save", "scissors", "search", "search-minus", "search-plus", "send", "send-o", "share", "share-alt", "share-alt-square", "share-square", "share-square-o", "shield", "shopping-cart", "sign-in", "sign-out", "signal", "sitemap", "skype", "slack", "sliders", "smile-o", "sort", "sort-alpha-asc", "sort-alpha-desc", "sort-amount-asc", "sort-amount-desc", "sort-asc", "sort-desc", "sort-down", "sort-numeric-asc", "sort-numeric-desc", "sort-up", "soundcloud", "space-shuttle", "spinner", "spoon", "spotify", "square", "square-o", "stack-exchange", "stack-overflow", "star", "star-half", "star-half-empty", "star-half-full", "star-half-o", "star-o", "steam", "steam-square", "step-backward", "step-forward", "stethoscope", "stop", "strikethrough", "stumbleupon", "stumbleupon-circle", "subscript", "suitcase", "sun-o", "superscript", "support", "table", "tablet", "tachometer", "tag", "tags", "tasks", "taxi", "tencent-weibo", "terminal", "text-height", "text-width", "th", "th-large", "th-list", "thumb-tack", "thumbs-down", "thumbs-o-down", "thumbs-o-up", "thumbs-up", "ticket", "times", "times-circle", "times-circle-o", "tint", "toggle-down", "toggle-left", "toggle-right", "toggle-up", "trash-o", "tree", "trello", "trophy", "truck", "try", "tumblr", "tumblr-square", "turkish-lira", "twitter", "twitter-square", "umbrella", "underline", "undo", "university", "unlink", "unlock", "unlock-alt", "unsorted", "upload", "usd", "user", "user-md", "users", "video-camera", "vimeo-square", "vine", "vk", "volume-down", "volume-off", "volume-up", "warning", "wechat", "weibo", "weixin", "wheelchair", "windows", "won", "wordpress", "wrench", "xing", "xing-square", "yahoo", "yen", "youtube", "youtube-play", "youtube-square" ];
+    c.defaultOptions.icons = ["fa-500px","fa-adjust","fa-adn","fa-align-center","fa-align-justify","fa-align-left","fa-align-right","fa-amazon","fa-ambulance","fa-anchor","fa-android","fa-angellist","fa-angle-double-down","fa-angle-double-left","fa-angle-double-right","fa-angle-double-up","fa-angle-down","fa-angle-left","fa-angle-right","fa-angle-up","fa-apple","fa-archive","fa-area-chart","fa-arrow-circle-down","fa-arrow-circle-left","fa-arrow-circle-o-down","fa-arrow-circle-o-left","fa-arrow-circle-o-right","fa-arrow-circle-o-up","fa-arrow-circle-right","fa-arrow-circle-up","fa-arrow-down","fa-arrow-left","fa-arrow-right","fa-arrow-up","fa-arrows","fa-arrows-alt","fa-arrows-h","fa-arrows-v","fa-asterisk","fa-at","fa-automobile","fa-backward","fa-balance-scale","fa-ban","fa-bank","fa-bar-chart","fa-bar-chart-o","fa-barcode","fa-bars","fa-battery-0","fa-battery-1","fa-battery-2","fa-battery-3","fa-battery-4","fa-battery-empty","fa-battery-full","fa-battery-half","fa-battery-quarter","fa-battery-three-quarters","fa-bed","fa-beer","fa-behance","fa-behance-square","fa-bell","fa-bell-o","fa-bell-slash","fa-bell-slash-o","fa-bicycle","fa-binoculars","fa-birthday-cake","fa-bitbucket","fa-bitbucket-square","fa-bitcoin","fa-black-tie","fa-bold","fa-bolt","fa-bomb","fa-book","fa-bookmark","fa-bookmark-o","fa-briefcase","fa-btc","fa-bug","fa-building","fa-building-o","fa-bullhorn","fa-bullseye","fa-bus","fa-buysellads","fa-cab","fa-calculator","fa-calendar","fa-calendar-check-o","fa-calendar-minus-o","fa-calendar-o","fa-calendar-plus-o","fa-calendar-times-o","fa-camera","fa-camera-retro","fa-car","fa-caret-down","fa-caret-left","fa-caret-right","fa-caret-square-o-down","fa-caret-square-o-left","fa-caret-square-o-right","fa-caret-square-o-up","fa-caret-up","fa-cart-arrow-down","fa-cart-plus","fa-cc","fa-cc-amex","fa-cc-diners-club","fa-cc-discover","fa-cc-jcb","fa-cc-mastercard","fa-cc-paypal","fa-cc-stripe","fa-cc-visa","fa-certificate","fa-chain","fa-chain-broken","fa-check","fa-check-circle","fa-check-circle-o","fa-check-square","fa-check-square-o","fa-chevron-circle-down","fa-chevron-circle-left","fa-chevron-circle-right","fa-chevron-circle-up","fa-chevron-down","fa-chevron-left","fa-chevron-right","fa-chevron-up","fa-child","fa-chrome","fa-circle","fa-circle-o","fa-circle-o-notch","fa-circle-thin","fa-clipboard","fa-clock-o","fa-clone","fa-close","fa-cloud","fa-cloud-download","fa-cloud-upload","fa-cny","fa-code","fa-code-fork","fa-codepen","fa-coffee","fa-cog","fa-cogs","fa-columns","fa-comment","fa-comment-o","fa-commenting","fa-commenting-o","fa-comments","fa-comments-o","fa-compass","fa-compress","fa-connectdevelop","fa-contao","fa-copy","fa-copyright","fa-creative-commons","fa-credit-card","fa-crop","fa-crosshairs","fa-css3","fa-cube","fa-cubes","fa-cut","fa-cutlery","fa-dashboard","fa-dashcube","fa-database","fa-dedent","fa-delicious","fa-desktop","fa-deviantart","fa-diamond","fa-digg","fa-dollar","fa-dot-circle-o","fa-download","fa-dribbble","fa-dropbox","fa-drupal","fa-edit","fa-eject","fa-ellipsis-h","fa-ellipsis-v","fa-empire","fa-envelope","fa-envelope-o","fa-envelope-square","fa-eraser","fa-eur","fa-euro","fa-exchange","fa-exclamation","fa-exclamation-circle","fa-exclamation-triangle","fa-expand","fa-expeditedssl","fa-external-link","fa-external-link-square","fa-eye","fa-eye-slash","fa-eyedropper","fa-facebook","fa-facebook-f","fa-facebook-official","fa-facebook-square","fa-fast-backward","fa-fast-forward","fa-fax","fa-feed","fa-female","fa-fighter-jet","fa-file","fa-file-archive-o","fa-file-audio-o","fa-file-code-o","fa-file-excel-o","fa-file-image-o","fa-file-movie-o","fa-file-o","fa-file-pdf-o","fa-file-photo-o","fa-file-picture-o","fa-file-powerpoint-o","fa-file-sound-o","fa-file-text","fa-file-text-o","fa-file-video-o","fa-file-word-o","fa-file-zip-o","fa-files-o","fa-film","fa-filter","fa-fire","fa-fire-extinguisher","fa-firefox","fa-flag","fa-flag-checkered","fa-flag-o","fa-flash","fa-flask","fa-flickr","fa-floppy-o","fa-folder","fa-folder-o","fa-folder-open","fa-folder-open-o","fa-font","fa-fonticons","fa-forumbee","fa-forward","fa-foursquare","fa-frown-o","fa-futbol-o","fa-gamepad","fa-gavel","fa-gbp","fa-ge","fa-gear","fa-gears","fa-genderless","fa-get-pocket","fa-gg","fa-gg-circle","fa-gift","fa-git","fa-git-square","fa-github","fa-github-alt","fa-github-square","fa-gittip","fa-glass","fa-globe","fa-google","fa-google-plus","fa-google-plus-square","fa-google-wallet","fa-graduation-cap","fa-gratipay","fa-group","fa-h-square","fa-hacker-news","fa-hand-grab-o","fa-hand-lizard-o","fa-hand-o-down","fa-hand-o-left","fa-hand-o-right","fa-hand-o-up","fa-hand-paper-o","fa-hand-peace-o","fa-hand-pointer-o","fa-hand-scissors-o","fa-hand-spock-o","fa-hand-stop-o","fa-hdd-o","fa-header","fa-headphones","fa-heart","fa-heart-o","fa-heartbeat","fa-history","fa-home","fa-hospital-o","fa-hotel","fa-hourglass","fa-hourglass-1","fa-hourglass-2","fa-hourglass-3","fa-hourglass-end","fa-hourglass-half","fa-hourglass-o","fa-hourglass-start","fa-houzz","fa-html5","fa-i-cursor","fa-ils","fa-image","fa-inbox","fa-indent","fa-industry","fa-info","fa-info-circle","fa-inr","fa-instagram","fa-institution","fa-internet-explorer","fa-intersex","fa-ioxhost","fa-italic","fa-joomla","fa-jpy","fa-jsfiddle","fa-key","fa-keyboard-o","fa-krw","fa-language","fa-laptop","fa-lastfm","fa-lastfm-square","fa-leaf","fa-leanpub","fa-legal","fa-lemon-o","fa-level-down","fa-level-up","fa-life-bouy","fa-life-buoy","fa-life-ring","fa-life-saver","fa-lightbulb-o","fa-line-chart","fa-link","fa-linkedin","fa-linkedin-square","fa-linux","fa-list","fa-list-alt","fa-list-ol","fa-list-ul","fa-location-arrow","fa-lock","fa-long-arrow-down","fa-long-arrow-left","fa-long-arrow-right","fa-long-arrow-up","fa-magic","fa-magnet","fa-mail-forward","fa-mail-reply","fa-mail-reply-all","fa-male","fa-map","fa-map-marker","fa-map-o","fa-map-pin","fa-map-signs","fa-mars-double","fa-mars-stroke","fa-mars-stroke-h","fa-mars-stroke-v","fa-maxcdn","fa-meanpath","fa-medium","fa-medkit","fa-mercury","fa-microphone","fa-microphone-slash","fa-minus","fa-minus-circle","fa-minus-square","fa-minus-square-o","fa-mobile","fa-mobile-phone","fa-money","fa-moon-o","fa-mortar-board","fa-motorcycle","fa-mouse-pointer","fa-music","fa-navicon","fa-neuter","fa-newspaper-o","fa-object-group","fa-object-ungroup","fa-odnoklassniki","fa-odnoklassniki-square","fa-opencart","fa-openid","fa-opera","fa-optin-monster","fa-outdent","fa-pagelines","fa-paint-brush","fa-paper-plane","fa-paper-plane-o","fa-paperclip","fa-paragraph","fa-paste","fa-pause","fa-paw","fa-paypal","fa-pencil","fa-pencil-square","fa-pencil-square-o","fa-phone","fa-phone-square","fa-photo","fa-picture-o","fa-pie-chart","fa-pied-piper","fa-pied-piper-alt","fa-pinterest","fa-pinterest-p","fa-pinterest-square","fa-plane","fa-play","fa-play-circle","fa-play-circle-o","fa-plug","fa-plus","fa-plus-circle","fa-plus-square","fa-plus-square-o","fa-power-off","fa-print","fa-puzzle-piece","fa-qq","fa-qrcode","fa-question","fa-question-circle","fa-quote-left","fa-quote-right","fa-ra","fa-random","fa-rebel","fa-recycle","fa-reddit","fa-reddit-square","fa-refresh","fa-registered","fa-remove","fa-renren","fa-reorder","fa-repeat","fa-reply","fa-reply-all","fa-retweet","fa-rmb","fa-road","fa-rocket","fa-rotate-left","fa-rotate-right","fa-rouble","fa-rss","fa-rss-square","fa-rub","fa-ruble","fa-rupee","fa-safari","fa-save","fa-scissors","fa-search","fa-search-minus","fa-search-plus","fa-sellsy","fa-send","fa-send-o","fa-server","fa-share","fa-share-alt","fa-share-alt-square","fa-share-square","fa-share-square-o","fa-shekel","fa-sheqel","fa-shield","fa-ship","fa-shirtsinbulk","fa-shopping-cart","fa-sign-in","fa-sign-out","fa-signal","fa-simplybuilt","fa-sitemap","fa-skyatlas","fa-skype","fa-slack","fa-sliders","fa-slideshare","fa-smile-o","fa-soccer-ball-o","fa-sort","fa-sort-alpha-asc","fa-sort-alpha-desc","fa-sort-amount-asc","fa-sort-amount-desc","fa-sort-asc","fa-sort-desc","fa-sort-down","fa-sort-numeric-asc","fa-sort-numeric-desc","fa-sort-up","fa-soundcloud","fa-space-shuttle","fa-spinner","fa-spoon","fa-spotify","fa-square","fa-square-o","fa-stack-exchange","fa-stack-overflow","fa-steam","fa-steam-square","fa-star","fa-star-half","fa-star-half-empty","fa-star-half-full","fa-star-half-o","fa-star-o","fa-step-backward","fa-step-forward","fa-stethoscope","fa-sticky-note","fa-sticky-note-o","fa-stop","fa-street-view","fa-strikethrough","fa-stumbleupon","fa-stumbleupon-circle","fa-subscript","fa-subway","fa-suitcase","fa-sun-o","fa-superscript","fa-support","fa-table","fa-tablet","fa-tachometer","fa-tag","fa-tags","fa-tasks","fa-taxi","fa-television","fa-tencent-weibo","fa-terminal","fa-text-height","fa-text-width","fa-th","fa-th-large","fa-th-list","fa-thumb-tack","fa-thumbs-down","fa-thumbs-o-down","fa-thumbs-o-up","fa-thumbs-up","fa-ticket","fa-times","fa-times-circle","fa-times-circle-o","fa-tint","fa-toggle-down","fa-toggle-left","fa-toggle-off","fa-toggle-on","fa-toggle-right","fa-toggle-up","fa-trademark","fa-train","fa-transgender","fa-transgender-alt","fa-trash","fa-trash-o","fa-tree","fa-trello","fa-tripadvisor","fa-trophy","fa-truck","fa-try","fa-tty","fa-tumblr","fa-tumblr-square","fa-turkish-lira","fa-tv","fa-twitch","fa-twitter","fa-twitter-square","fa-umbrella","fa-underline","fa-university","fa-unlink","fa-unlock","fa-unlock-alt","fa-unsorted","fa-upload","fa-usd","fa-user","fa-user-md","fa-user-plus","fa-user-secret","fa-user-times","fa-users","fa-venus","fa-venus-double","fa-venus-mars","fa-viacoin","fa-video-camera","fa-vimeo","fa-vimeo-square","fa-vine","fa-vk","fa-volume-down","fa-volume-off","fa-volume-up","fa-warning","fa-wechat","fa-weibo","fa-weixin","fa-whatsapp","fa-wheelchair","fa-wifi","fa-wikipedia-w","fa-windows","fa-won","fa-wordpress","fa-wrench","fa-xing","fa-xing-square","fa-y-combinator","fa-y-combinator-square","fa-yahoo","fa-yc","fa-yc-square","fa-yelp","fa-yen","fa-youtube","fa-youtube-play","fa-youtube-square"];
 });
