@@ -53,4 +53,10 @@ Auch die in Bootstrap bekannte Komponente einer "Input group" ist möglich:
 </div>
 ```
 
+oder als Alternative kann man auch einfach auf das Input-Element die Klasse ```icp-group``` setzen.
+
+```html
+<input data-placement="bottomRight" class="form-control icp icp-group" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
+```
+
 Danke an @tbaddade für Inspiration.
