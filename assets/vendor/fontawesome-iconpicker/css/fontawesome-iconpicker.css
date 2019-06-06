@@ -309,12 +309,6 @@
   border-radius: 3px;
   font-size: 14px;
   box-shadow: 0 0 0 1px #dddddd;
-  /*&:nth-child(4n+4) {
-            margin-right: 0;
-        }
-        &:nth-last-child(-n+4) {
-            margin-bottom: 0;
-        }*/
 }
 .iconpicker .iconpicker-item:hover:not(.iconpicker-selected) {
   background-color: #eeeeee;
