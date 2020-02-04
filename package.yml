@@ -4,4 +4,4 @@ author: 'Friends Of REDAXO'
 supportpage: https://github.com/FriendsOfREDAXO/iconpicker
 
 requires:
-    redaxo: '>=5.6'
+    redaxo: '^5.6'
