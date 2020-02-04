@@ -7,7 +7,7 @@ Für Font Awesome-Icons, auch andere Font-Icons möglich
 ## Funktion
 
 Das Iconpicker-AddOn verwendet folgendes Skript:
-<a href="http://mjolnic.com/fontawesome-iconpicker/" target="_blank" href="">http://mjolnic.com/fontawesome-iconpicker/</a></p>
+<a href="http://mjolnic.com/fontawesome-iconpicker/" target="_blank" href="">https://github.com/itsjavi/fontawesome-iconpicker</a></p>
 
 Eventuelle Anpassungen beim Aufruf des Iconpickers können am besten in die Datei ```assets/iconpicker.js``` geschrieben werden.
 
