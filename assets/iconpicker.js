@@ -1,4 +1,4 @@
-$(document).on('ready pjax:success mblock:add', function () {
+$(document).on('rex:ready pjax:success mblock:add', function () {
     window.setTimeout(function() {
         $('.icp').each(function () {
             var $this = $(this);
