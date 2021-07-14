@@ -1,5 +1,10 @@
 # Iconpicker-AddOn für REDAXO 5
 
+⚠️ Entwicklung eingestellt: Das AddOn wird an dieser Stelle nicht länger gepflegt. / Deprecated: this addOn won’t be maintained any longer.
+Als Alternative mit mehr Funktionalität empfiehlt sich:  fa_iconpicker(https://github.com/FriendsOfREDAXO/fa_iconpicker). 
+
+---
+
 Für Font Awesome-Icons, auch andere Font-Icons möglich
 
 ![screenshot_iconpicker](https://cloud.githubusercontent.com/assets/330160/15991766/e87b44c8-30bc-11e6-8bab-c7094d278d0d.jpg)
