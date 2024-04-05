@@ -62,5 +62,4 @@ MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/iconpicker/blo
 
 ## Credits
 
-Basierend auf <https://www.cssscript.com/bootstrap-5-icon-picker/>
-Vorarbeit geleistet unter <https://github.com/alexplusde/bs5_iconpicker>
+Basierend auf <https://www.cssscript.com/bootstrap-5-icon-picker/>, vorarbeit geleistet unter <https://github.com/alexplusde/bs5_iconpicker>
