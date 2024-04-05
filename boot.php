@@ -4,7 +4,6 @@ if (rex_addon::get('yform')->isAvailable()) {
     rex_yform::addTemplatePath(rex_path::addon('iconpicker', 'ytemplates'));
 }
 
-
 $addon = rex_addon::get('iconpicker');
 rex_view::addCssFile($addon->getAssetsUrl('/font/bootstrap-icons.css'));
 

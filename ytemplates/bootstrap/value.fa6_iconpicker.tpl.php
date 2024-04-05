@@ -5,7 +5,7 @@
  * @psalm-scope-this rex_yform_value_fa6_iconpicker
  */
 
-$type = $type ?? 'text';
+$type ??= 'text';
 $class = 'text' == $type ? '' : 'form-' . $type . ' ';
 if (!isset($value)) {
     $value = $this->getValue();
@@ -45,13 +45,12 @@ $attributes = $this->getAttributeElements($attributes, ['placeholder', 'autocomp
 $input_group_start = '';
 $input_group_end = '';
 
-$icon_preview = '<span class="input-group-addon selected-icon-'.$this->getId().'"><i class="rex-icon '.$value.'"></i></span>';
+$icon_preview = '<span class="input-group-addon selected-icon-' . $this->getId() . '"><i class="rex-icon ' . $value . '"></i></span>';
 
 $input_group_start = '<div class="input-group">';
 $input_group_end = '</div>';
 
-
-echo '<div class="'.implode(' ', $class_group).'" id="'.$this->getHTMLId().'">
-        <label class="'.implode(' ', $class_label).'" for="'.$this->getFieldId().'">'.$this->getLabel().'</label>
-        ' . $input_group_start . $icon_preview . '<input data-fa-iconpicker="'.$this->getId().'" '.implode(' ', $attributes).' />' . $input_group_end . $notice .'
+echo '<div class="' . implode(' ', $class_group) . '" id="' . $this->getHTMLId() . '">
+        <label class="' . implode(' ', $class_label) . '" for="' . $this->getFieldId() . '">' . $this->getLabel() . '</label>
+        ' . $input_group_start . $icon_preview . '<input data-fa-iconpicker="' . $this->getId() . '" ' . implode(' ', $attributes) . ' />' . $input_group_end . $notice . '
         </div>';

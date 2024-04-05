@@ -1,4 +1,5 @@
 <?php
+
 class rex_yform_value_fa6_iconpicker extends rex_yform_value_text
 {
     public function enterObject()
@@ -59,6 +60,6 @@ class rex_yform_value_fa6_iconpicker extends rex_yform_value_text
 
     public static function getListValue($params)
     {
-        return  '<i class="rex-icon '.$params['subject'].'"> '.$params['subject'].'</i>';
+        return '<i class="rex-icon ' . $params['subject'] . '"> ' . $params['subject'] . '</i>';
     }
 }
