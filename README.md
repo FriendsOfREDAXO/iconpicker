@@ -1,67 +1,65 @@
-# Iconpicker-AddOn für REDAXO 5
+# Iconpicker (Bootstrap Icons, FontAwesome 6) für REDAXO
 
-⚠️ Entwicklung eingestellt: Das AddOn wird an dieser Stelle nicht länger gepflegt. / Deprecated: this addOn won’t be maintained any longer.
-Als Alternative mit mehr Funktionalität empfiehlt sich:  fa_iconpicker(https://github.com/FriendsOfREDAXO/fa_iconpicker). 
+Stellt Icons von <https://icons.getbootstrap.com/> und die REDAXO 5.17-eingebauten <https://fontawesome.com/search> mit einem Icon-Auswahlfeld zur Verfügung.
 
----
+![image](https://github.com/FriendsOfREDAXO/iconpicker/assets/3855487/c8360b9f-0a77-48e7-a7e9-02756c9fb9a4)
 
-Für Font Awesome-Icons, auch andere Font-Icons möglich
+## Features
 
-![screenshot_iconpicker](https://cloud.githubusercontent.com/assets/330160/15991766/e87b44c8-30bc-11e6-8bab-c7094d278d0d.jpg)
+### Verwendung in YForm
 
-## Funktion
+Verwende das Value `bi_iconpicker`, um einen Icon Picker für Bootstrap Icons zur Verfügung zu stellen.
+Verwende das Value `fa6_iconpicker`, um einen Icon Picker für Fontawesome 6 (Free) zur Verfügung zu stellen.
 
-Das Iconpicker-AddOn verwendet folgendes Skript:
-<a href="http://mjolnic.com/fontawesome-iconpicker/" target="_blank" href="">https://github.com/itsjavi/fontawesome-iconpicker</a></p>
-
-Eventuelle Anpassungen beim Aufruf des Iconpickers können am besten in die Datei ```assets/iconpicker.js``` geschrieben werden.
-
-## Benutzung
-
-Um den Iconpicker für ein Textfeld zu aktivieren, diesem die CSS-Klasse "icp" zuweisen.
-```html
-<input class="form-control icp" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
-```
-
-### Hinweis
-
-Damit das Popup nicht abgeschnitten wird, muss der Container `form-group` die CSS-Eigenschaft `overflow: visible` haben.
-Die Position des Popups kann über data-placement bestimmt werden.
-
-Der vollständige Beispiel-Code für ein Modul könnte also so aussehen:
-
-```html
-<div class="form-group" style="overflow: visible;">
-	<label class="col-sm-2 control-label">Icon</label>
-	<div class="col-sm-10">
-		<input data-placement="bottomRight" class="form-control icp" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
-	</div>
-</div>
-```
-
-## Filtern direkt im Input-Feld
-
-Um die Icons direkt im Input-Feld zu filtern, wird data-input-search="true" gesetzt:
-
-```html
-<input data-input-search="true" class="form-control icp" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
-```
-
-## Darstellung als "Input Group"
-
-Auch die in Bootstrap bekannte Komponente einer "Input group" ist möglich:
+### Eigene Verwendung im Backend (auch in Metainfos)
 
 ```html
 <div class="input-group">
-	<input data-placement="bottomRight" class="form-control icp" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
-	<span class="input-group-addon"></span>
+ <span class="input-group-addon selected-icon-0"></span>
+ <input type="text" data-bi-iconpicker="0" value="bi-cloud-fog2" class="form-control bi-iconpicker" />
+</div>
+<div class="input-group">
+ <span class="input-group-addon selected-icon-1"></span>
+ <input type="text" data-bi-iconpicker="1" value="bi-folder" class="form-control bi-iconpicker" />
+</div>
+<div class="input-group">
+ <span class="input-group-addon selected-icon-15"><i class="bi-x"></i></span>
+ <input type="text" data-bi-iconpicker="15" value="" class="form-control bi-iconpicker" />
 </div>
 ```
 
-oder als Alternative kann man auch einfach auf das Input-Element die Klasse ```icp-group``` setzen.
-
 ```html
-<input data-placement="bottomRight" class="form-control icp icp-group" type="text" name="REX_INPUT_VALUE[1]" value="REX_VALUE[1]">
+<div class="input-group">
+ <span class="input-group-addon selected-icon-0"></span>
+ <input type="text" data-fa-iconpicker="0" value="rex-icon fa-cloud-fog2" class="form-control fa6-iconpicker" />
+</div>
+<div class="input-group">
+ <span class="input-group-addon selected-icon-1"></span>
+ <input type="text" data-fa-iconpicker="1" value="rex-icon fa-folder" class="form-control fa6-iconpicker" />
+</div>
+<div class="input-group">
+ <span class="input-group-addon selected-icon-15"><i class="rex-icon fa-x"></i></span>
+ <input type="text" data-fa-iconpicker="15" value="" class="form-control fa6-iconpicker" />
+</div>
 ```
 
-Danke an @tbaddade für Inspiration.
+### Verwendung im Frontend
+
+Die Verwendung im Frontend bleibt dem Entwickler überlassen. Nutze die beiliegende Icon-Schrift oder lade das passende SVG von <https://icons.getbootstrap.com/>
+
+## Lizenz
+
+MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/iconpicker/blob/master/LICENSE.md)  
+
+## Autoren
+
+**Alexander Walther**  
+<http://www.alexplus.de>  
+<https://github.com/alexplusde>  
+
+**Projekt-Lead**  
+[Alexander Walther](https://github.com/alexplusde)
+
+## Credits
+
+Basierend auf <https://www.cssscript.com/bootstrap-5-icon-picker/>

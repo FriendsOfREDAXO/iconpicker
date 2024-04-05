@@ -1,1 +1,4 @@
-title = FontAwesome Iconpicker
+iconpicker_title = Iconpicker
+
+yform_values_iconpicker_description = 🧩 Icon Picker: Stellt eine Auswahl von "Bootstrap Icons" zur Verfügung.
+yform_values_fa6_iconpicker_description = 🧩 Icon Picker: Stellt eine Auswahl von "FontAwesome 6 Free"-Icons zur Verfügung.
