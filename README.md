@@ -2,7 +2,7 @@
 
 Stellt Icons von <https://icons.getbootstrap.com/> und die REDAXO 5.17-eingebauten <https://fontawesome.com/search> mit einem Icon-Auswahlfeld zur Verfügung.
 
-![image](https://github.com/alexplusde/bi_iconpicker/assets/3855487/917e5a0f-e0cd-4989-83d5-1705244c643c)
+![image](https://github.com/FriendsOfREDAXO/iconpicker/assets/3855487/c8360b9f-0a77-48e7-a7e9-02756c9fb9a4)
 
 ## Features
 
