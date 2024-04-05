@@ -59,7 +59,8 @@ class rex_yform_value_bi_iconpicker extends rex_yform_value_text
     }
 
     public static function getListValue($params)
+    
     {
-        return '<i class="' . $params['subject'] . '"> ' . $params['subject'] . '</i>';
+        return '<span class="text-nowrap"><i class="rex-icon ' . $params['subject'] . '"></i>&nbsp;' . $params['subject'] .'</span>';
     }
 }
