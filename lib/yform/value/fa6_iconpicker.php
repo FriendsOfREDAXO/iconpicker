@@ -60,6 +60,6 @@ class rex_yform_value_fa6_iconpicker extends rex_yform_value_text
 
     public static function getListValue($params)
     {
-        return '<span class="text-nowrap"><i class="rex-icon ' . $params['subject'] . '"></i>&nbsp;' . $params['subject'] .'</span>';
+        return '<span class="text-nowrap"><i class="rex-icon ' . $params['subject'] . '"></i>&nbsp;' . $params['subject'] . '</span>';
     }
 }
