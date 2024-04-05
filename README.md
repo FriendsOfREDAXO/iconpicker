@@ -1,4 +1,4 @@
-# Iconpicker (Bootstrap Icons, FontAwesome 6) für REDAXO
+# Iconpicker (Bootstrap Icons, FontAwesome 6) für REDAXO ^5.17
 
 Stellt Icons von <https://icons.getbootstrap.com/> und die REDAXO 5.17-eingebauten <https://fontawesome.com/search> mit einem Icon-Auswahlfeld zur Verfügung.
 
@@ -63,3 +63,4 @@ MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/iconpicker/blo
 ## Credits
 
 Basierend auf <https://www.cssscript.com/bootstrap-5-icon-picker/>
+Vorarbeit geleistet unter <https://github.com/alexplusde/bs5_iconpicker>
