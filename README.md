@@ -11,41 +11,36 @@ Stellt Icons von <https://icons.getbootstrap.com/> und die REDAXO 5.17-eingebaut
 Verwende das Value `bi_iconpicker`, um einen Icon Picker für Bootstrap Icons zur Verfügung zu stellen.
 Verwende das Value `fa6_iconpicker`, um einen Icon Picker für Fontawesome 6 (Free) zur Verfügung zu stellen.
 
-### Eigene Verwendung im Backend (auch in Metainfos)
+### Beispiele zur eigenen Verwendung im Backend (auch in Metainfos)
 
 ```html
+<!-- Allgemeines Beispiel - so muss der Quellcode aussehen -->
 <div class="input-group">
  <span class="input-group-addon selected-icon-0"></span>
  <input type="text" data-bi-iconpicker="0" value="bi-cloud-fog2" class="form-control bi-iconpicker" />
 </div>
+<!-- Beispiel für Moduleingaben - `#` anpassen -->
 <div class="input-group">
- <span class="input-group-addon selected-icon-1"></span>
- <input type="text" data-bi-iconpicker="1" value="bi-folder" class="form-control bi-iconpicker" />
-</div>
-<div class="input-group">
- <span class="input-group-addon selected-icon-15"><i class="bi-x"></i></span>
- <input type="text" data-bi-iconpicker="15" value="" class="form-control bi-iconpicker" />
+ <span class="input-group-addon selected-icon-#"></span>
+ <input type="text" data-bi-iconpicker="#" name="REX_INPUT_VALUE[#]" value="REX_VALUE[#]" class="form-control bi-iconpicker" />
 </div>
 ```
-
 ```html
+<!-- Allgemeines Beispiel - so muss der Quellcode aussehen -->
 <div class="input-group">
  <span class="input-group-addon selected-icon-0"></span>
  <input type="text" data-fa-iconpicker="0" value="rex-icon fa-cloud-fog2" class="form-control fa6-iconpicker" />
 </div>
+<!-- Beispiel für Moduleingaben - `#` anpassen -->
 <div class="input-group">
- <span class="input-group-addon selected-icon-1"></span>
- <input type="text" data-fa-iconpicker="1" value="rex-icon fa-folder" class="form-control fa6-iconpicker" />
-</div>
-<div class="input-group">
- <span class="input-group-addon selected-icon-15"><i class="rex-icon fa-x"></i></span>
- <input type="text" data-fa-iconpicker="15" value="" class="form-control fa6-iconpicker" />
+ <span class="input-group-addon selected-icon-#"></span>
+ <input type="text" data-bi-iconpicker="#" name="REX_INPUT_VALUE[#]" value="REX_VALUE[#]" class="form-control fa6-iconpicker" />
 </div>
 ```
 
 ### Verwendung im Frontend
 
-Die Verwendung im Frontend bleibt dem Entwickler überlassen. Nutze die beiliegende Icon-Schrift oder lade das passende SVG von <https://icons.getbootstrap.com/>
+Die Verwendung im Frontend bleibt dem Entwickler überlassen. Nutze die beiliegende Icon-Schrift oder lade das passende SVG von <https://icons.getbootstrap.com/> bzw. FontAwesome 6.
 
 ## Lizenz
 
