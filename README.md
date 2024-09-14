@@ -46,11 +46,12 @@ Die Verwendung im Frontend bleibt dem Entwickler überlassen. Nutze die beiliege
 
 MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/iconpicker/blob/master/LICENSE.md)  
 
-## Autoren
+## Autor
 
-**Alexander Walther**  
-<http://www.alexplus.de>  
-<https://github.com/alexplusde>  
+**Friends Of REDAXO**
+http://www.redaxo.org
+https://github.com/FriendsOfREDAXO
+
 
 **Projekt-Lead**  
 [Alexander Walther](https://github.com/alexplusde)
