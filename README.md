@@ -44,7 +44,7 @@ Die Verwendung im Frontend bleibt dem Entwickler überlassen. Nutze die beiliege
 
 ## Lizenz
 
-MIT Lizenz, siehe [LICENSE.md](https://github.com/friendsofredaxo/iconpicker/blob/master/LICENSE.md)  
+MIT Lizenz, siehe [LICENSE](https://github.com/friendsofredaxo/iconpicker/blob/master/LICENSE)  
 
 ## Autor
 
